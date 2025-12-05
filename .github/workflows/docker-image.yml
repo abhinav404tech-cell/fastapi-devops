@@ -17,11 +17,6 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-      - name: Check secrets exist (safe)
-        run: |
-            test -n "${{ secrets.AWS_ACCESS_KEY_ID }}" || (echo "Missing AWS_ACCESS_KEY_ID"; exit 1)
-            test -n "${{ secrets.AWS_SECRET_ACCESS_KEY }}" || (echo "Missing AWS_SECRET_ACCESS_KEY"; exit 1)
-            echo "Secrets are present (masked to logs)"
 
       - name: Set up QEMU (for buildx multi-arch, optional)
         uses: docker/setup-qemu-action@v2
