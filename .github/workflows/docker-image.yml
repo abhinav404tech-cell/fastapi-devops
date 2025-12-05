@@ -57,6 +57,5 @@ jobs:
       - name: (optional) Add 'latest' tag and push
         if: always()
         run: |
-          LATEST="latest"
-          docker tag "${{ steps.build-image.outputs.full_image }}:" "${LATEST}"
+          docker tag "${{ steps.build-image.outputs.full_image }}:"
           docker push "${LATEST}"
