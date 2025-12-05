@@ -57,6 +57,6 @@ jobs:
       - name: (optional) Add 'latest' tag and push
         if: always()
         run: |
-          LATEST="${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:latest"
-          docker tag "${{ steps.build-image.outputs.full_image }}" "${LATEST}"
+          LATEST="latest"
+          docker tag "${{ steps.build-image.outputs.full_image }}:" "${LATEST}"
           docker push "${LATEST}"
