@@ -43,8 +43,8 @@ jobs:
       - name: Build and tag Docker image
         id: build-image
         run: |
-          IMAGE_TAG=${{ github.sha }}
-          FULL_IMAGE=${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:${IMAGE_TAG}
+          # IMAGE_TAG=${{ github.sha }}
+          FULL_IMAGE=${{ env.ECR_REPOSITORY }}:${{env.IMAGE_NAME}}
           # build
           docker build . --file Dockerfile --tag "${FULL_IMAGE}"
           echo "full_image=${FULL_IMAGE}" >> $GITHUB_OUTPUT
