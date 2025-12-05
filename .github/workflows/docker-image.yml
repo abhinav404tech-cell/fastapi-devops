@@ -1,0 +1,56 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  AWS_REGION: ap-south-1               # ← change to your region
+  ECR_REPOSITORY: 335660922529.dkr.ecr.ap-south-1.amazonaws.com/fastapidevops    # ← e.g. my-app-repo
+  IMAGE_NAME: fastapi-devops
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU (for buildx multi-arch, optional)
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and tag Docker image
+        id: build-image
+        run: |
+          IMAGE_TAG=${{ github.sha }}
+          FULL_IMAGE=${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:${IMAGE_TAG}
+          # build
+          docker build . --file Dockerfile --tag "${FULL_IMAGE}"
+          echo "full_image=${FULL_IMAGE}" >> $GITHUB_OUTPUT
+
+      - name: Push image to ECR
+        run: |
+          # push the image built in the previous step
+          docker push "${{ steps.build-image.outputs.full_image }}"
+
+      - name: (optional) Add 'latest' tag and push
+        if: always()
+        run: |
+          LATEST="${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:latest"
+          docker tag "${{ steps.build-image.outputs.full_image }}" "${LATEST}"
+          docker push "${LATEST}"
