@@ -54,9 +54,3 @@ jobs:
         run: |
           # push the image built in the previous step
           docker push "${{ steps.build-image.outputs.full_image }}"
-
-      - name: (optional) Add 'latest' tag and push
-        if: always()
-        run: |
-          docker tag "${{ steps.build-image.outputs.full_image }}:"
-          docker push "${LATEST}"
