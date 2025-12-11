@@ -7,7 +7,7 @@ on:
     branches: [ "master" ]
 
 env:
-  AWS_REGION: ap-south-1               # ← change to your region
+  AWS_REGION: us-east-1               # ← change to your region
   # ECR_REPOSITORY: 335660922529.dkr.ecr.ap-south-1.amazonaws.com/fastapidevops    # ← e.g. my-app-repo
   ECR_REPOSITORY: 335660922529.dkr.ecr.us-east-1.amazonaws.com/fastapidevops
   IMAGE_NAME: fastapi-devops
