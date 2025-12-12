@@ -76,7 +76,8 @@ jobs:
           # aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           # aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           
-          role-to-assume: arn:aws:iam::335660922529:role/GitHubActions-Dev
+          # role-to-assume: arn:aws:iam::335660922529:role/GitHubActions-Dev
+          role-to-assume: ${{ steps.setenv.outputs.ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
           # ${{ steps.setenv.outputs.ENV }}
       - name: Who am I (debug)
