@@ -15,6 +15,6 @@ def hello():
 
 
 
-@app.get("/tessting/")
+@app.get("/testing/")
 def hello():
     return {"message": "testing"}
