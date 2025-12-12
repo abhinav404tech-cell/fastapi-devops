@@ -12,3 +12,9 @@ def read_root():
 @app.get("/hello/")
 def hello():
     return {"message": "Hello"}
+
+
+
+@app.get("/tessting/")
+def hello():
+    return {"message": "testing"}
