@@ -5,12 +5,19 @@ permissions:
   contents: read
 on:
   push:
-    branches: [ "master" ]
+    branches: 
+      # [ "master" ]
+      - dev
+      - qa
+      - master  
   pull_request:
     branches: [ "master" ]
 
 env:
-  AWS_REGION: us-east-1               # ← change to your region
+  AWS_REGION: us-east-1
+  AWS_ACCOUNT_ID_DEV: 335660922529
+  AWS_ACCOUNT_ID_QA: 335660922529
+  AWS_ACCOUNT_ID_PROD: 335660922529
   # ECR_REPOSITORY: 335660922529.dkr.ecr.ap-south-1.amazonaws.com/fastapidevops    # ← e.g. my-app-repo
   ECR_REPOSITORY: 335660922529.dkr.ecr.us-east-1.amazonaws.com/fastapidevops
   IMAGE_NAME: fastapi-devops
@@ -18,12 +25,36 @@ env:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    environment: dev
+    # environment: dev
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+      
+
+      - name: Determine environment from branch
+        id: setenv
+        run: |
+          BRANCH="${GITHUB_REF#refs/heads/}"
+          echo "branch=$BRANCH" >> $GITHUB_OUTPUT
+          if [ "$BRANCH" = "dev" ]; then
+            echo "ENV=dev" >> $GITHUB_OUTPUT
+            # role ARN: either hardcode or follow naming convention
+            echo "ROLE_ARN=arn:aws:iam::${{ env.AWS_ACCOUNT_ID_DEV }}:role/GitHubActions-Dev" >> $GITHUB_OUTPUT
+            
+          elif [ "$BRANCH" = "qa" ]; then
+            echo "ENV=qa" >> $GITHUB_OUTPUT
+            echo "ROLE_ARN=arn:aws:iam::${{ env.AWS_ACCOUNT_ID_QA }}:role/GitHubActions-Dev" >> $GITHUB_OUTPUT
+            
+          else
+            echo "ENV=prod" >> $GITHUB_OUTPUT
+            echo "ROLE_ARN=arn:aws:iam::${{ env.AWS_ACCOUNT_ID_PROD }}:role/GitHubActions-Dev" >> $GITHUB_OUTPUT
+          fi
+
       - name: Print debug info
         run: |
+          echo "branch: ${{ steps.setenv.outputs.branch }}"
+          echo "ENV: ${{ steps.setenv.outputs.ENV }}"
+          echo "ROLE_ARN: ${{ steps.setenv.outputs.ROLE_ARN }}"
           echo "GITHUB_REPOSITORY=$GITHUB_REPOSITORY"
           echo "GITHUB_REF=$GITHUB_REF"
           echo "SHORT_SHA=${GITHUB_SHA::7}"
