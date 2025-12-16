@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage("Checkout Code") {
             steps {
-                echo "GitHub h webhook triggered this build"
+                echo "GitHub hpp webhook triggered this build"
                 checkout scm
             }
         }
