@@ -2,6 +2,11 @@ pipeline {
     agent any
 
     parameters {
+        booleanParam(
+            name: 'RUN_BUILD',
+            defaultValue: true,
+            description: 'Run the build stage'
+        )
         choice(
             name: 'ENV',
             choices: ['dev', 'qa', 'prod'],
@@ -25,6 +30,7 @@ pipeline {
         }
 
         stage('Set Environment Config') {
+            echo "Building for RUN_BUILD: ${params.RUN_BUILD}"
             steps {
                 script {
                     if (params.ENV == 'dev') {
