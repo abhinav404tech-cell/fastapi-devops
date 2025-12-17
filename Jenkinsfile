@@ -30,7 +30,6 @@ pipeline {
         }
 
         stage('Set Environment Config') {
-            
             steps {
                 script {
                     if (params.ENV == 'dev') {
