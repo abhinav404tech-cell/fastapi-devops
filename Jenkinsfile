@@ -21,7 +21,7 @@ pipeline {
         //         docker build -t %ECR_REPO%:%IMAGE_TAG% .              
         //         """
         //     }
-        }
+        // }
         stage('Login to AWS ECR') {
             steps {
                 withCredentials([usernamePassword(
