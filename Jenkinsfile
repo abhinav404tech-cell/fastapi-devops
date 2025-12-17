@@ -1,6 +1,14 @@
 pipeline {
     agent any
 
+    parameters {
+        choice(
+            name: 'ENV',
+            choices: ['dev', 'qa', 'prod'],
+            description: 'Select environment to build and push image'
+        )
+        }
+
     environment {
         AWS_REGION = 'us-east-1'
         AWS_ACCOUNT_ID = '335660922529'
@@ -36,8 +44,8 @@ pipeline {
 
                     aws sts get-caller-identity
 
-                    // aws ecr get-login-password --region %AWS_REGION% ^
-                    // | docker login --username AWS --password-stdin %AWS_ACCOUNT_ID%.dkr.ecr.%AWS_REGION%.amazonaws.com
+                    aws ecr get-login-password --region %AWS_REGION% ^
+                    | docker login --username AWS --password-stdin %AWS_ACCOUNT_ID%.dkr.ecr.%AWS_REGION%.amazonaws.com
                     """
                 }
             }
