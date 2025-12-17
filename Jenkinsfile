@@ -1,15 +1,16 @@
 pipeline {
     agent any
 
-    triggers {
-        githubPush()
-    }
-
     stages {
-        stage("Checkout Code") {
+        stage('Checkout') {
             steps {
-                echo "GitHub hpp webhook triggered this build"
                 checkout scm
+            }
+        }
+
+        stage('Verify') {
+            steps {
+                bat 'dir'
             }
         }
     }

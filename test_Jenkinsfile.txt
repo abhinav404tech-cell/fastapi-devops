@@ -1,0 +1,19 @@
+// pipeline {
+//     agent any
+
+//     stages {
+//         stage('Checkout Code') {
+//             steps {
+//                 git branch: 'dev',
+//                     url: 'https://github.com/abhinav404tech-cell/fastapi-devops',
+//                     credentialsId: 'github-credentials'
+//             }
+//         }
+
+//         stage('Verify') {
+//             steps {
+//                 sh 'ls -la'
+//             }
+//         }
+//     }
+// }
