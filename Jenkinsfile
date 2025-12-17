@@ -30,19 +30,22 @@ pipeline {
         }
 
         stage('Set Environment Config') {
-            echo "Building for RUN_BUILD: ${params.RUN_BUILD}"
+            
             steps {
                 script {
                     if (params.ENV == 'dev') {
                         // env.AWS_ACCOUNT_ID = '111111111111'
                         // env.ECR_REPO = 'fastapi-devops-dev'
                         echo "Building for environment: ${params.ENV}"
+                        echo "Building for RUN_BUILD: ${params.RUN_BUILD}"
                     } else if (params.ENV == 'qa') {
                         // env.AWS_ACCOUNT_ID = '222222222222'
                         // env.ECR_REPO = 'fastapi-devops-qa'
                         echo "Building for environment: ${params.ENV}"
+                        echo "Building for RUN_BUILD: ${params.RUN_BUILD}"
                     } else {
                         echo "Building for environment: ${params.ENV}"
+                        echo "Building for RUN_BUILD: ${params.RUN_BUILD}"
                         // env.AWS_ACCOUNT_ID = '333333333333'
                         // env.ECR_REPO = 'fastapi-devops-prod'
                     }
