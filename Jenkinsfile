@@ -23,6 +23,28 @@ pipeline {
                 checkout scm
             }
         }
+
+        stage('Set Environment Config') {
+            steps {
+                script {
+                    if (params.ENV == 'dev') {
+                        // env.AWS_ACCOUNT_ID = '111111111111'
+                        // env.ECR_REPO = 'fastapi-devops-dev'
+                        echo "Building for environment: ${params.ENV}"
+                    } else if (params.ENV == 'qa') {
+                        // env.AWS_ACCOUNT_ID = '222222222222'
+                        // env.ECR_REPO = 'fastapi-devops-qa'
+                        echo "Building for environment: ${params.ENV}"
+                    } else {
+                        echo "Building for environment: ${params.ENV}"
+                        // env.AWS_ACCOUNT_ID = '333333333333'
+                        // env.ECR_REPO = 'fastapi-devops-prod'
+                    }
+
+                    // env.ECR_URI = "${env.AWS_ACCOUNT_ID}.dkr.ecr.${env.AWS_REGION}.amazonaws.com/${env.ECR_REPO}"
+                }
+            }
+        }
         // stage('Build Docker Image') {
         //     steps {
         //         bat """
