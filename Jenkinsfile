@@ -15,12 +15,12 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Build Docker Image') {
-            steps {
-                bat """
-                docker build -t %ECR_REPO%:%IMAGE_TAG% .              
-                """
-            }
+        // stage('Build Docker Image') {
+        //     steps {
+        //         bat """
+        //         docker build -t %ECR_REPO%:%IMAGE_TAG% .              
+        //         """
+        //     }
         }
         stage('Login to AWS ECR') {
             steps {
@@ -34,8 +34,10 @@ pipeline {
                     aws configure set aws_secret_access_key %AWS_SECRET_ACCESS_KEY%
                     aws configure set region %AWS_REGION%
 
-                    aws ecr get-login-password --region %AWS_REGION% ^
-                    | docker login --username AWS --password-stdin %AWS_ACCOUNT_ID%.dkr.ecr.%AWS_REGION%.amazonaws.com
+                    aws sts get-caller-identity
+
+                    // aws ecr get-login-password --region %AWS_REGION% ^
+                    // | docker login --username AWS --password-stdin %AWS_ACCOUNT_ID%.dkr.ecr.%AWS_REGION%.amazonaws.com
                     """
                 }
             }
